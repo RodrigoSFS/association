@@ -14,8 +14,8 @@ User.destroy_all
 User.create email: 'admin@admin.com', password: '111111'
 
 50.times do
-  User.create email: Faker::Internet.email,
-  password: "111111"
+  User.create email: Faker::Internet.email ,
+  password: Faker::Internet.password
 end
 
 100.times do

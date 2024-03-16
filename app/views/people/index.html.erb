@@ -36,6 +36,7 @@
       <th></th>
     </tr>
   </thead>
+  <%= will_paginate @posts %>
   <tbody>
     <% @people.each do |person| %>
       <tr>
@@ -73,5 +74,4 @@
     <% end %>
   </tbody>
 </table>
-
-<%= will_paginate @people %>
+<%= will_paginate @posts %>

@@ -6,6 +6,7 @@ class Person < ApplicationRecord
   validates :name, :national_id, presence: true
   validates :national_id, uniqueness: true
   validate :cpf_or_cnpj
+  self.per_page = 50
 
   # TODO: refactor me
   #

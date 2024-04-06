@@ -1,10 +1,14 @@
-<p style="color: green"><%= notice %></p>
+<%# TODO: refactor DRY %>
+<% if notice.present? %>
+  <div class="alert alert-success">
+    <%= notice %>
+  </div>
+<% end %>
+
+<%= link_to "< Voltar", payments_path, class: 'btn btn-secondary btn-sm' %>
 
 <%= render @payment %>
 
-<div>
-  <%= link_to "Edit this payment", edit_payment_path(@payment) %> |
-  <%= link_to "Back to payments", payments_path %>
+<%= link_to 'Editar', edit_payment_path(@payment), class: "btn btn-primary mb-2" %>
 
-  <%= button_to "Destroy this payment", @payment, method: :delete %>
-</div>
+<%= button_to "Remover", @payment, method: :delete, class: 'btn btn-danger' %>

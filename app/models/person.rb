@@ -3,6 +3,8 @@ class Person < ApplicationRecord
 
   has_many :debts, dependent: :destroy
 
+  has_many :payments, dependent: :destroy
+
   validates :name, :national_id, presence: true
   validates :national_id, uniqueness: true
   validate :cpf_or_cnpj

@@ -9,13 +9,24 @@ class Person < ApplicationRecord
   validate :cpf_or_cnpj
   self.per_page = 50
 
+  # def update_balance
+  #   update(balance: balance)
+  # end
+
   # TODO: refactor me
   #
   # - improve performance using SQL
   # - sum payments
   # - rename to "balance"
-  def balance
-    payments.sum(:amount) - debts.sum(:amount)
+
+  # def cached_balance (needs to be specified on the person view)
+  def update_balance
+    update! balance: payments.sum(:amount) - debts.sum(:amount)
+    # balance = payments.sum(:amount) - debts.sum(:amount)
+    # save!
+    # # Rails.cache.fetch "balance_#{id}" do
+    # payments.sum(:amount) - debts.sum(:amount)
+    # end
   end
 
   private

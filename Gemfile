@@ -1,5 +1,7 @@
 source "https://rubygems.org"
 
+gem "chartkick"
+
 gem 'faker'
 
 gem 'will_paginate', '~> 4.0'

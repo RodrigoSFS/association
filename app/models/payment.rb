@@ -9,4 +9,9 @@ class Payment < ApplicationRecord
   def update_person_balance
     person.update_balance
   end
+
+  # Implementacao da alternativa em cache ao invés de criar uma coluna do banco
+  # def update_person_balance
+  #   person.clear_balance_cache
+  # end
 end

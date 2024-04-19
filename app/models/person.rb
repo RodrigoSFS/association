@@ -24,10 +24,18 @@ class Person < ApplicationRecord
     update! balance: payments.sum(:amount) - debts.sum(:amount)
     # balance = payments.sum(:amount) - debts.sum(:amount)
     # save!
-    # # Rails.cache.fetch "balance_#{id}" do
-    # payments.sum(:amount) - debts.sum(:amount)
-    # end
   end
+
+  # Implementacao da alternativa em cache ao invés de criar uma coluna do banco
+  # def cached_balance
+  #   Rails.cache.fetch "balance_#{id}" do
+  #     payments.sum(:amount) - debts.sum(:amount)
+  #   end
+  # end
+
+  # def clear_balance_cache
+  #   Rails.cache.clear "balance_#{id}"
+  # end
 
   private
 

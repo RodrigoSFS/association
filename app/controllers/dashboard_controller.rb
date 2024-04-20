@@ -2,39 +2,16 @@ class DashboardController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @active_people_pie_chart = {
-      active: Person.where(active: true).count,
-      inactive: Person.where(active: false).count
-    }
+    @dashboard_service = DashboardService.new(current_user)
 
-    # Total somando todos associados ativos
-    active_people_ids = Person.where(active: true).select(:id)
-    @total_debts = Debt.where(person_id: active_people_ids).sum(:amount)
-    @total_payments = Payment.where(person_id: active_people_ids).sum(:amount)
-    @balance = @total_payments - @total_debts
-
-    # últimos lançamentos
-    # no formato somente id + amount para o kickchart
-    @last_debts = Debt.order(created_at: :desc).limit(10).map do |debt|
-      [debt.id, debt.amount]
-    end
-    @last_payments = Payment.order(created_at: :desc).limit(10).map do |payment|
-      [payment.id, payment.amount]
-    end
-
-    # últimos associados cadastrados pelo usuário atual
-    @my_people = Person.where(user: current_user).order(:created_at).limit(10)
-
-    people = Person.all.select do |person|
-      person.balance > 0
-    end.sort_by do |person|
-      person.balance
-    end
-
-    # associado com maior saldo
-    @top_person = people.last
-
-    # associado com menor saldo
-    @bottom_person = people.first
+    @active_people_pie_chart = @dashboard_service.active_people_pie_chart
+    @total_debts = @dashboard_service.total_debts
+    @total_payments = @dashboard_service.total_payments
+    @balance = @dashboard_service.balance
+    @last_debts = @dashboard_service.last_debts
+    @last_payments = @dashboard_service.last_payments
+    @my_people = @dashboard_service.my_people
+    @top_person = @dashboard_service.top_person
+    @bottom_person = @dashboard_service.bottom_person
   end
 end

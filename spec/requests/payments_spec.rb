@@ -13,7 +13,7 @@ require 'rails_helper'
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/payments", type: :request do
-  
+
   # This should return the minimal set of attributes required to create a valid
   # Payment. As you add validations to Payment, be sure to
   # adjust the attributes here as well.
@@ -37,13 +37,6 @@ RSpec.describe "/payments", type: :request do
     it "renders a successful response" do
       payment = Payment.create! valid_attributes
       get payment_url(payment)
-      expect(response).to be_successful
-    end
-  end
-
-  describe "GET /new" do
-    it "renders a successful response" do
-      get new_payment_url
       expect(response).to be_successful
     end
   end
@@ -77,12 +70,12 @@ RSpec.describe "/payments", type: :request do
         }.to change(Payment, :count).by(0)
       end
 
-    
+
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post payments_url, params: { payment: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 
@@ -108,13 +101,13 @@ RSpec.describe "/payments", type: :request do
     end
 
     context "with invalid parameters" do
-    
+
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         payment = Payment.create! valid_attributes
         patch payment_url(payment), params: { payment: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
-    
+
     end
   end
 

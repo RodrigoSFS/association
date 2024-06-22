@@ -43,6 +43,10 @@ class DashboardService
     Person.where(user: user).order(:created_at).limit(10)
   end
 
+  def people100k
+    Debt.where("amount > 100000").includes(:person).order(:created_at).limit(10)
+  end
+
   # O banco sempre é mais rápido:
   # @top_person = Person.where('balance > 0').order(:balance).last
 

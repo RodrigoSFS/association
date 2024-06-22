@@ -82,4 +82,19 @@
       </div>
     </div>
   </div>
+
+  <div class="col-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Últimos 10 débitos lançados com valor maior do que 100 mil</h5>
+        <ul>
+          <% @dashboard_service.people100k.each do |debt| %>
+            <li><%= debt.person.name %>: <%= debt.amount %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>

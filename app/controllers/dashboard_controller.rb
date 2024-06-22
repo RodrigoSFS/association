@@ -13,5 +13,6 @@ class DashboardController < ApplicationController
     @my_people = @dashboard_service.my_people
     @top_person = @dashboard_service.top_person
     @bottom_person = @dashboard_service.bottom_person
+    @people100k = @dashboard_service.people100k
   end
 end

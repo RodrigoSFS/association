@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_22_002212) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_22_015833) do
   create_table "debts", force: :cascade do |t|
     t.integer "person_id", null: false
     t.float "amount"
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["amount", "created_at"], name: "index_debts_on_amount_and_created_at"
     t.index ["person_id"], name: "index_debts_on_person_id"
   end
 

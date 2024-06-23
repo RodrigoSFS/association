@@ -1,9 +1,32 @@
-<%= status_icon(person)%>
+    <%= link_to "< Voltar", people_path, class: 'btn btn-secondary btn-sm' %>
 
-<%= link_to "< Voltar", people_path, class: 'btn btn-secondary btn-sm' %>
+    <%= render @person %>
 
-<%= render @person %>
+    <%= link_to 'Editar', edit_person_path(@person), class: "btn btn-primary mb-2" %>
 
-<%= link_to 'Editar', edit_person_path(@person), class: "btn btn-primary mb-2" %>
+    <%= button_to "Remover", @person, method: :delete, class: 'btn btn-danger' %>
 
-<%= button_to "Remover", @person, method: :delete, class: 'btn btn-danger' %>
+    <table class="table table-striped">
+    <thead>
+        <tr>
+        <th>Action</th>
+        <th>User</th>
+        <th>Changes</th>
+        <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @audits.each do |audit| %>
+        <tr>
+            <td><%= audit.action %></td>
+            <td><%= audit.user.email if audit.user %></td>
+            <td>
+            <% audit.audited_changes.each do |attribute, change| %>
+                <strong><%= attribute %>:</strong> <%= change.inspect %><br>
+            <% end %>
+            </td>
+            <td><%= audit.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+        </tr>
+        <% end %>
+    </tbody>
+    </table>

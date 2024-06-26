@@ -4,69 +4,79 @@ class DashboardService
   end
 
   def active_people_pie_chart
-    {
-      active: Person.where(active: true).count,
-      inactive: Person.where(active: false).count
-    }
+    Rails.cache.fetch('active_people_pie_chart', expires_in: 1.hour) do
+      {
+        active: Person.where(active: true).count,
+        inactive: Person.where(active: false).count
+      }
+    end
   end
 
   def active_people_ids
-    Person.where(active: true).select(:id)
+    Rails.cache.fetch('active_people_ids', expires_in: 1.hour) do
+      Person.where(active: true).select(:id).pluck(:id)
+    end
   end
 
   def total_debts
-    Debt.where(person_id: active_people_ids).sum(:amount)
+    Rails.cache.fetch('total_debts', expires_in: 1.hour) do
+      Debt.where(person_id: active_people_ids).sum(:amount)
+    end
   end
 
   def total_payments
-    Payment.where(person_id: active_people_ids).sum(:amount)
+    Rails.cache.fetch('total_payments', expires_in: 1.hour) do
+      Payment.where(person_id: active_people_ids).sum(:amount)
+    end
   end
 
   def balance
     total_payments - total_debts
   end
 
-  # no formato somente id + amount para o kickchart
   def last_debts
-    Debt.order(created_at: :desc).limit(10).map do |debt|
-      [debt.id, debt.amount]
+    Rails.cache.fetch('last_debts', expires_in: 1.hour) do
+      Debt.order(created_at: :desc).limit(10).pluck(:id, :amount)
     end
   end
 
   def last_payments
-    Payment.order(created_at: :desc).limit(10).map do |payment|
-      [payment.id, payment.amount]
+    Rails.cache.fetch('last_payments', expires_in: 1.hour) do
+      Payment.order(created_at: :desc).limit(10).pluck(:id, :amount)
     end
   end
 
   def my_people
-    Person.where(user: user).order(:created_at).limit(10)
+    Rails.cache.fetch("my_people_#{user.id}", expires_in: 1.hour) do
+      Person.where(user: user).order(:created_at).limit(10)
+    end
   end
 
   def people100k
-    Debt.where("amount > 100000").includes(:person).order(:created_at).limit(10)
-  end
-
-  # O banco sempre é mais rápido:
-  # @top_person = Person.where('balance > 0').order(:balance).last
-
-  def people
-    people = Person.all.select do |person|
-    person.balance > 0
-    end.sort_by do |person|
-      person.balance
+    Rails.cache.fetch('people100k', expires_in: 1.hour) do
+      Debt.where("amount > 100000").includes(:person).order(:created_at).limit(10)
     end
   end
 
   def top_person
-    people.last
+    Rails.cache.fetch('top_person', expires_in: 1.hour) do
+      people.last
+    end
   end
 
   def bottom_person
-    people.first
+    Rails.cache.fetch('bottom_person', expires_in: 1.hour) do
+      people.first
+    end
   end
 
   private
 
   attr_reader :user
+
+  def people
+    Rails.cache.fetch('people', expires_in: 1.hour) do
+      Person.all.select { |person| person.balance > 0 }.sort_by(&:balance)
+    end
+  end
 end
